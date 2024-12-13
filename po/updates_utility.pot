@@ -49,7 +49,7 @@ msgid "System Updates Settings"
 msgstr ""
 
 #: vanilla_updates_utility/gtk/window-main.ui:19
-#: vanilla_updates_utility/windows/main_window.py:133
+#: vanilla_updates_utility/windows/main_window.py:148
 msgid "Cancel"
 msgstr ""
 
@@ -85,30 +85,36 @@ msgstr ""
 msgid "Monthly"
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:85
+#: vanilla_updates_utility/windows/main_window.py:88
+#: vanilla_updates_utility/windows/main_window.py:116
+#: vanilla_updates_utility/windows/main_window.py:138
+msgid "Operation canceled"
+msgstr ""
+
+#: vanilla_updates_utility/windows/main_window.py:93
 msgid "Smart updates enabled"
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:85
+#: vanilla_updates_utility/windows/main_window.py:93
 msgid "Smart updates disabled"
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:107
 #: vanilla_updates_utility/windows/main_window.py:119
+#: vanilla_updates_utility/windows/main_window.py:131
 #, python-brace-format
 msgid "Frequency set to {translated_value}"
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:128
+#: vanilla_updates_utility/windows/main_window.py:143
 msgid "Disable Automatic Updates?"
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:130
+#: vanilla_updates_utility/windows/main_window.py:145
 msgid ""
 "Disabling automatic updates is not recommended. If you choose to proceed, "
 "you might miss important security updates and bug fixes."
 msgstr ""
 
-#: vanilla_updates_utility/windows/main_window.py:134
+#: vanilla_updates_utility/windows/main_window.py:149
 msgid "Disable"
 msgstr ""
