@@ -81,9 +81,17 @@ class UpdatesUtilityWindow(Adw.ApplicationWindow):
         self.row_frequency.connect("notify::selected", self.__on_frequency_changed)
 
     def __on_smart_updates_toggled(self, widget: Gtk.Switch, state: bool):
-        self.__vso_settings.set_config_value_bool("updates.smart", state)
-        self.toast(_("Smart updates enabled") if state else _("Smart updates disabled"))
-
+        if not self.__vso_settings.set_config_value_bool("updates.smart", state):
+            widget.handler_block_by_func(self.__on_smart_updates_toggled)
+            widget.set_active(not state)
+            widget.handler_unblock_by_func(self.__on_smart_updates_toggled)
+            self.toast(_("Operation canceled."))
+        else:
+            widget.handler_block_by_func(self.__on_smart_updates_toggled)
+            widget.set_active(state)
+            widget.handler_unblock_by_func(self.__on_smart_updates_toggled)
+            self.toast(_("Smart updates enabled") if state else _("Smart updates disabled"))
+    
     def __on_frequency_changed(self, widget, *args):
         index = widget.get_selected()
         if index == self.__previous_schedule:
@@ -101,8 +109,12 @@ class UpdatesUtilityWindow(Adw.ApplicationWindow):
 
         if key == "never":
             self.__auto_update_disable_warning(key, translated_value)
+            return
+
+        if not self.__vso_settings.set_config_value("updates.schedule", key):
+            self.row_frequency.set_selected(self.__previous_schedule)
+            self.toast(_("Operation canceled."))
         else:
-            self.__vso_settings.set_config_value("updates.schedule", key)
             self.toast(
                 _("Frequency set to {translated_value}").format(
                     translated_value=translated_value
@@ -114,13 +126,16 @@ class UpdatesUtilityWindow(Adw.ApplicationWindow):
         def commit_schedule(dialog: Adw.AlertDialog, result: Gio.AsyncResult):
             response = dialog.choose_finish(result)
             if response == "disable":
-                self.__vso_settings.set_config_value("updates.schedule", key_set)
-                self.toast(
-                    _("Frequency set to {translated_value}").format(
-                        translated_value=value_set
+                if self.__vso_settings.set_config_value("updates.schedule", key_set):
+                    self.toast(
+                        _("Frequency set to {translated_value}").format(
+                            translated_value=value_set
+                        )
                     )
-                )
-                self.__previous_schedule = self.row_frequency.get_selected()
+                    self.__previous_schedule = self.row_frequency.get_selected()
+                else:
+                    self.row_frequency.set_selected(self.__previous_schedule)
+                    self.toast(_("Operation canceled."))
             else:
                 self.row_frequency.set_selected(self.__previous_schedule)
 
